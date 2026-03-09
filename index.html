@@ -1,0 +1,176 @@
+<!doctype html>
+<html dir="rtl" lang="he">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>מחולל דוחות פדגוגיים</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- ========== HEADER ========== -->
+    <header class="header">
+      <div class="header__brand">
+        <div class="header__logo">📋</div>
+        <span class="header__title">מחולל דוחות פדגוגיים</span>
+      </div>
+      <div class="header__user">
+        <div>
+          <div class="header__user-name">מירי לוי</div>
+          <div class="header__user-role">יועצת חינוכית</div>
+        </div>
+        <div class="header__avatar">מ</div>
+      </div>
+    </header>
+
+    <!-- ========== MAIN CONTENT ========== -->
+    <main class="page-wrapper">
+      <div class="content-area">
+        <!-- Page Title -->
+        <h1 class="page-title">יצירת דוח פדגוגי</h1>
+
+        <!-- ===== STEPPER ===== -->
+        <div class="stepper" id="stepper">
+          <div class="stepper__step is-active" id="step-indicator-1">
+            <div class="stepper__circle">1</div>
+            <span class="stepper__label">בחירת תבנית ומילוי שאלון</span>
+          </div>
+
+          <div class="stepper__step" id="step-indicator-2">
+            <div class="stepper__circle">2</div>
+            <span class="stepper__label">העלאת PDF ועריכת טיוטה</span>
+          </div>
+
+          <div class="stepper__step" id="step-indicator-3">
+            <div class="stepper__circle">3</div>
+            <span class="stepper__label">אישור וייצוא</span>
+          </div>
+        </div>
+
+        <!-- ===== STEP 1: Template Selection + Questionnaire ===== -->
+        <div class="step-panel is-active" id="step-1">
+          <div class="card">
+            <h2 class="section-title">שלב 1 — בחירת תבנית ומילוי שאלון</h2>
+
+            <!-- Template Dropdown -->
+            <div class="form-group">
+              <label for="template-select">בחר תבנית דוח</label>
+              <select
+                class="form-control"
+                id="template-select"
+                onchange="onTemplateChange()"
+              >
+                <option value="">— בחר תבנית —</option>
+                <option value="A">תבנית א׳ — מכתב עדכון להורים</option>
+                <option value="B">תבנית ב׳ — סיכום פדגוגי פנימי</option>
+                <option value="C">תבנית ג׳ — הפניה ליועץ</option>
+                <option value="D">תבנית ד׳ — מכתב הצטיינות</option>
+                <option value="E">תבנית ה׳ — תוכנית התערבות התנהגותית</option>
+              </select>
+            </div>
+
+            <!-- Questionnaire (rendered by JS) -->
+            <div id="questionnaire-area" style="display: none">
+              <div class="divider"></div>
+              <h3 class="card-title" id="questionnaire-title">שאלון</h3>
+              <div id="questionnaire-fields"></div>
+            </div>
+
+            <!-- Continue Button -->
+            <div id="step1-btn-area" style="display: none; margin-top: 24px">
+              <button class="btn btn-primary btn-full" onclick="goToStep(2)">
+                המשך לשלב 2 — העלאת PDF ועריכה ←
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== STEP 2: PDF Upload + Draft Edit ===== -->
+        <div class="step-panel" id="step-2">
+          <div class="card">
+            <h2 class="section-title">שלב 2 — העלאת PDF ועריכת טיוטה</h2>
+
+            <!-- PDF Upload Button -->
+            <button
+              class="upload-btn"
+              id="upload-btn"
+              onclick="simulatePdfUpload()"
+            >
+              <span id="upload-icon">📎</span>
+              <span id="upload-text">העלאת מסמך PDF (אופציונלי)</span>
+            </button>
+
+            <!-- Teacher Narrative (shown after upload) -->
+            <div id="teacher-narrative-area" style="display: none">
+              <div class="ai-insights">
+                <div class="ai-insights__title">🤖 ניתוח AI מהמסמך שהועלה</div>
+                <div class="ai-insights__content" id="teacher-narrative-text">
+                  מתוך הדוח שהועלה: יוסף הראה שיפור בציוני עברית (מ-65 ל-74)
+                  בסמסטר האחרון. עם זאת, נרשמו 4 היעדרויות במאי. המורים מציינים
+                  פוטנציאל גבוה שטרם מומש במלואו.
+                </div>
+              </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- Draft Report Textarea -->
+            <div class="form-group">
+              <label for="draft-textarea">טיוטת הדוח (ניתנת לעריכה)</label>
+              <textarea
+                class="form-control draft-area"
+                id="draft-textarea"
+                placeholder="הטיוטה תופיע כאן לאחר בחירת התבנית בשלב 1..."
+              ></textarea>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="step-nav">
+              <button class="btn btn-outline" onclick="goToStep(1)">
+                → חזור לשלב 1
+              </button>
+              <button class="btn btn-primary" onclick="goToStep(3)">
+                המשך לאישור ←
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== STEP 3: Export + Approval ===== -->
+        <div class="step-panel" id="step-3">
+          <div class="card">
+            <div class="success-screen">
+              <div class="success-icon">✅</div>
+              <h2 class="success-title">הדוח נוצר בהצלחה</h2>
+              <p class="success-subtitle">
+                זכור — עליך לעיין בדוח ולאשר את תוכנו לפני שליחה.
+              </p>
+
+              <div class="export-buttons">
+                <button class="btn btn-secondary" onclick="copyText()">
+                  📋 העתק טקסט
+                </button>
+                <button class="btn btn-secondary" onclick="exportWord()">
+                  📄 ייצא כקובץ Word
+                </button>
+              </div>
+
+              <button class="btn btn-outline" onclick="resetApp()">
+                + צור דוח חדש
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- /content-area -->
+    </main>
+
+    <!-- Toast notification -->
+    <div class="toast" id="toast"></div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
